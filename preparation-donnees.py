@@ -17,7 +17,7 @@ targets = []
 features = []
 steroides = []
 
-for filename in files:
+for filename in files[:1000]:
     protein_name = filename[22:-4]
     if protein_name in nuc:
         features.append(np.load(filename))
