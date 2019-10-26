@@ -1,6 +1,7 @@
 # Lecture des données
 import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split 
+
 features = np.load('features.npy')
 targets = np.load('targets.npy')
 steroides = np.load('steroides.npy') #ajouter y control pour faire des courbes ROC
@@ -10,6 +11,8 @@ X_train, X_valid, y_train, y_valid = train_test_split(features, targets, test_si
 from keras.models import Sequential
 from keras.layers import Dense, Convolution3D, Flatten, MaxPooling3D, Dropout, Activation
 from keras.layers.advanced_activations import LeakyReLU
+from keras.callbacks import EarlyStopping
+
 model = Sequential() 
 
         # 1ère convolution 
@@ -41,11 +44,17 @@ model.add(Activation('softmax'))
 ## Compilation
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 ## Training
+EarlyStopping(monitor='val_loss', min_delta=0.1, patience=6, verbose=0, mode='auto', baseline=None, restore_best_weights=False)
 model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=25)
 
-## Prédiction
+## predict test inputs and generate ROC data and Calculate AUC (area under curve
 
-#Y_control = model.predict(steroides[:4])
+#Y_pred = model.predict(X_valid[:4])
 #for i in range(len(4)):
 #    print(" Predicted=%s" % (Y_control[i]))
+
+
+#https://github.com/Tony607/ROC-Keras/blob/master/ROC-Keras.ipynb
+
+
 
