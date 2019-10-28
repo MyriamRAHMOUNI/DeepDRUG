@@ -9,27 +9,37 @@ def preparation(files, nuc, hemes, steroid, control):
     targets = []
     features = []
     steroides = []
-
-    for filename in files[:10]:
+    i = 0
+    j = 0
+    k = 0
+    l = 0
+    for filename in files:
         protein_name = filename[22:-4]
-        # hemes, control et nuc vont servir de class
+            # hemes, control et nuc vont servir de class        
         if protein_name in nuc:
-            features.append(np.load(filename))
-            target = [1, 0, 0]
-            targets.append(target)
+            if i < 500: 
+                features.append(np.load(filename))
+                target = [1, 0, 0]
+                targets.append(target)
+                i = i + 1
         elif protein_name in hemes:
-            features.append(np.load(filename))
-            target = [0, 1, 0]
-            targets.append(target)
+             if j < 500:
+                features.append(np.load(filename))
+                target = [0, 1, 0]
+                targets.append(target)
+                j = j + 1
         elif protein_name in control:
-            con = np.load(filename)
-            features.append(np.reshape(con,(14, 32, 32, 32)))
-            target = [0, 0, 1]
-            targets.append(target)
-	    # Steroid est crée pour evaluer le model
+            if k < 500:
+                con = np.load(filename)
+                features.append(np.reshape(con,(14, 32, 32, 32)))
+                target = [0, 0, 1]
+                targets.append(target)
+                k = k + 1
+            # Steroid est crée pour evaluer le model
         elif protein_name in steroid:
-            ster = np.load(filename)
-            steroides.append(np.reshape(ster,(14, 32, 32, 32)))
+                ster = np.load(filename)
+                steroides.append(np.reshape(ster,(14, 32, 32, 32)))
+                l = l + 1
         else:
             raise Exception(protein_name, "Cette protèine n'est présente dans aucune liste" )
 
