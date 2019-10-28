@@ -37,6 +37,7 @@ def preparation(files, nuc, hemes, steroid, control):
                 k = k + 1
             # Steroid est crée pour evaluer le model
         elif protein_name in steroid:
+            if l < 69: 
                 ster = np.load(filename)
                 steroides.append(np.reshape(ster,(14, 32, 32, 32)))
                 l = l + 1
@@ -53,9 +54,9 @@ def preparation(files, nuc, hemes, steroid, control):
     print('stero: ', steroides.shape)
 
 #Save results
-    np.save('features', features)
-    np.save('targets', targets)
-    np.save('steroides', steroides)
+    np.save('features_test', features)
+    np.save('targets_test', targets)
+    np.save('steroides_test', steroides)
 
 
 if __name__ == "__main__":
@@ -67,7 +68,3 @@ if __name__ == "__main__":
     voxel_folder = 'deepdrug3d_voxel_data'
     files = glob.glob(voxel_folder+'/*.npy')
     preparation(files, nuc, hemes, steroid, control)
-
-
-
-
