@@ -30,12 +30,15 @@ def creation_model():
     model.add(Flatten())
     model.add(Dense(3))
     model.add(Activation('sigmoid'))
+    summary = str(model.summary())
+    with open("summary_model.txt",'w') as fh:
+        model.summary(print_fn=lambda x: fh.write(x + '\n'))
     return model
 
 def train_model(model, X_train, y_train, X_valid, y_valid):
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     EarlyStopping(monitor='val_loss', min_delta=0.1, patience=6, verbose=0, mode='auto', baseline=None, restore_best_weights=False)
-    model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=1)
+    model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=25)
 
 def prediction(model, x, out, save_results): # x c'est les proteines à prédir out c'est le nom du fichier qui contiendra mes prédictions
     pred = model.predict(x)
@@ -54,9 +57,7 @@ def Camembert_pred(stéroid_pred):
     indef = 0
     for i in range(len(stéroid_pred)):
         proba = np.array(stéroid_pred[i])
-        print(proba)
         Class = (proba > 0.5).astype(np.int)
-        print(Class)
         if Class[0] == 1 and Class[1] == 0 and Class[0] == 0:
             Nuc = Nuc + 1
         elif Class[1] == 1 and Class[0] == 0 and Class[2] == 0:
@@ -65,15 +66,15 @@ def Camembert_pred(stéroid_pred):
             con = con + 1
         else:
             indef = indef + 1
+    
     labels = 'Nucléotides', 'Hemes', 'Contrôle', 'indéfini'
     sizes = [Nuc, Hem, con, indef]
     colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
-    plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90)
-    plt.legend()
+    plt.pie(sizes, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90, pctdistance = 1.4)
+    plt.legend(labels)
     plt.axis('equal')
     plt.savefig('stéroide_prédiction.png')
     plt.show()
-    pass
 
 
 def ROC_AUC(y_valid, Y_pred):
@@ -124,6 +125,7 @@ def ROC_AUC(y_valid, Y_pred):
     plt.ylabel('True Positive Rate')
     plt.title('Some extension of Receiver operating characteristic to multi-class')
     plt.legend(loc="lower right")
+    plt.savefig('ROC_AUC.png')
     plt.show()
 
 if __name__ == "__main__":
