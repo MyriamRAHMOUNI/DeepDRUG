@@ -38,7 +38,7 @@ def creation_model():
 def train_model(model, X_train, y_train, X_valid, y_valid):
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     EarlyStopping(monitor='val_loss', min_delta=0.1, patience=6, verbose=0, mode='auto', baseline=None, restore_best_weights=False)
-    model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=25)
+    model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=20)
 
 def prediction(model, x, out, save_results): # x c'est les proteines à prédir out c'est le nom du fichier qui contiendra mes prédictions
     pred = model.predict(x)
@@ -123,7 +123,6 @@ def ROC_AUC(y_valid, Y_pred):
     plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('Some extension of Receiver operating characteristic to multi-class')
     plt.legend(loc="lower right")
     plt.savefig('ROC_AUC.png')
     plt.show()
